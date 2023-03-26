@@ -1,0 +1,3 @@
+
+FILE_FOLDER = 'share'
+MAX_FILE_SIZE = 1024
