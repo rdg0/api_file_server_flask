@@ -2,6 +2,8 @@ from flask import Flask, json, request, jsonify
 import filecmp # это чтобы сравнить файлы
 import os
 
+import db
+
 
 
 
@@ -10,8 +12,8 @@ import os
 В ТЗ (п.4) сказано, что необходимо проверять, есть ли файл с таким же СОДЕРЖИМЫМ в системе или нет.
 Соотвественно, проверка на дубликат должная быть не по имени. Вероятно, нужно для каждого нового файла расчитывать MD5 хеш
 и хранить в БД.
-То есть делаем таблицу
-id, filename, extension, hash
+То есть делаем таблицу:
+id, filename, extension, size, hash
 
  """
 
@@ -25,22 +27,29 @@ app = Flask(__name__)
 
 @app.route('/files/get/list', methods=['GET'])
 def get_list_files():
-    pass
+
+    files = db.get_file_list()
+
 
 
 @app.route('/files/get/<extantion>', methods=['GET'])
 def get_file_extantion():
-    pass
+    files = db.get_file_list_by_extension()
 
 
 @app.route('/files/create/', methods=['POST']) 
 def create():
-    pass
+
+    db.create_file()
+
+
+
 
 
 @app.route('/files/delete/<filename>', methods=['DELETE'])
 def delete_file():
-    pass
+    db.delete_file()
+
 
 
 @app.route('/files/get/<extantion>/<filename>', methods=['GET'])
