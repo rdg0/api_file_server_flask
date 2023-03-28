@@ -1,7 +1,7 @@
 import os
 from flask import Flask,  jsonify, request, send_from_directory
 from flask.typing import ResponseReturnValue
-from typing import Dict, List, Tuple
+from typing import Dict, List
 from werkzeug.utils import secure_filename
 
 import db
@@ -18,14 +18,14 @@ app.config['MAX_CONTENT_LENGTH'] = settings.MAX_FILE_SIZE
 @app.route('/files/get/list', methods=['GET'])
 def get_list_files() -> ResponseReturnValue:
     """Возвращаем список всех файлы."""
-    files: List[Dict] = services.prepare_to_serializing(db.get_file_list().fetchall())
+    files: List[Dict] = services.preserializing(db.get_file_list().fetchall())
     return jsonify({'files': files}), 200
 
 
 @app.route('/files/get/<extantion>', methods=['GET'])
 def get_file_extantion(extantion: str) -> ResponseReturnValue:
     """Возвращаем список файлов с определенным расширением."""
-    files: List[Dict] = services.prepare_to_serializing(
+    files: List[Dict] = services.preserializing(
         db.get_file_list_by_extention(extantion).fetchall()
     )
     return jsonify({'files': files}), 200
@@ -48,7 +48,9 @@ def create() -> ResponseReturnValue:
     if file:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    hsh: str = services.get_md5(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    hsh: str = services.get_md5(
+        os.path.join(app.config['UPLOAD_FOLDER'], filename)
+    )
     if db.get_file_by_hash(hsh).fetchone():
         os.remove((os.path.join(app.config['UPLOAD_FOLDER'], filename)))
         return jsonify(
