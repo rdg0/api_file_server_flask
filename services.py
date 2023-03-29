@@ -28,8 +28,8 @@ def preserializing(rows: List[Tuple]) -> List[Dict]:
 
 def parse_file_to_save(filename: str) -> Tuple[str, str, float]:
     """Подготваливаем данные для сохранения в БД."""
-    exteneshion: str = filename.split('.')[-1]
+    extention: str = filename.split('.')[-1]
     size: float = os.path.getsize((
         os.path.join(settings.FILE_FOLDER, filename)
     ))
-    return filename, exteneshion, size
+    return filename, extention, size

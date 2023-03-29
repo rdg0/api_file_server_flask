@@ -32,6 +32,7 @@ SQLite
 ```
 git clone git@github.com:Rdg0/api_file_server_flask
 ```
+
 Перейти в директорию с проектом:
 
 ```
